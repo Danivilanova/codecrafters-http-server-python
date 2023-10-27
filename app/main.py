@@ -12,14 +12,26 @@ def main():
     conn, addr = server_socket.accept() # wait for client
 
     # get data
-    data = conn.recv(1024).decode("utf-8")
+    data = conn.recv(1024).decode()
+
     path = data.split(" ")[1]
+
     if path == "/":
-        conn.send(b"HTTP/1.1 200 OK\r\n\r\n")
+        response = "HTTP/1.1 200 OK\r\n\r\n"
+    elif path.startswith("/echo/"):
+        content = path.split("/echo/")[1]
+        content_length = len(content)
+        response = (
+            "HTTP/1.1 200 OK\r\n"
+            "Content-Type: text/plain\r\n"
+            f"Content-Length: {content_length}\r\n"
+            "\r\n"
+            f"{content}"
+        )
     else:
-        conn.send(b"HTTP/1.1 404 Not Found\r\n\r\n")
+        response = "HTTP/1.1 404 Not Found\r\n\r\n"
 
-
+    conn.send(response.encode())
 
 
 if __name__ == "__main__":
