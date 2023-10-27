@@ -30,6 +30,21 @@ def handle_client(conn, addr):
             "\r\n"
             f"{agent}"
         )
+    elif path.startswith("/files/"):
+        file_name = path.split("/files/")[1]
+        try:
+            with open(f"files/{file_name}", "rb") as f:
+                content = f.read()
+                content_length = len(content)
+                response = (
+                    "HTTP/1.1 200 OK\r\n"
+                    "Content-Type: application/octet-stream\r\n"
+                    f"Content-Length: {content_length}\r\n"
+                    "\r\n"
+                    f"{content}"
+                )
+        except FileNotFoundError:
+            response = "HTTP/1.1 404 Not Found\r\n\r\n"
     else:
         response = "HTTP/1.1 404 Not Found\r\n\r\n"
 
