@@ -7,7 +7,8 @@ def handle_client(conn, addr, args):
     # get data
     data = conn.recv(1024).decode()
 
-    path = data.split(" ")[1]
+    header = data.split("\r\n")[0]
+    reqest_type, path, protocol = header.split(" ")
 
     if path == "/":
         response = "HTTP/1.1 200 OK\r\n\r\n"
@@ -31,7 +32,7 @@ def handle_client(conn, addr, args):
             "\r\n"
             f"{agent}"
         )
-    elif path.startswith("/files/"):
+    elif path.startswith("/files/") and reqest_type == "GET":
         file_name = path.split("/files/")[1]
         folder = args.directory
         try:
@@ -47,6 +48,13 @@ def handle_client(conn, addr, args):
                 )
         except FileNotFoundError:
             response = "HTTP/1.1 404 Not Found\r\n\r\n"
+    elif path.startswith("/files/") and reqest_type == "POST":
+        file_name = path.split("/files/")[1]
+        folder = args.directory
+        content = data.split("\r\n\r\n")[1]
+        with open(f"{folder}/{file_name}", "wb") as f:
+            f.write(content.encode())
+        response = "HTTP/1.1 201 OK\r\n\r\n"
     else:
         response = "HTTP/1.1 404 Not Found\r\n\r\n"
 
@@ -75,5 +83,5 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--directory", default="")
     args = parser.parse_args()
-    print(args)
+
     main(args)
