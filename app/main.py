@@ -28,6 +28,16 @@ def main():
             "\r\n"
             f"{content}"
         )
+    elif path == "/user-agent":
+        agent = data.split("User-Agent: ")[1].split("\r\n")[0]
+        agent_length = len(agent)
+        response = (
+            "HTTP/1.1 200 OK\r\n"
+            "Content-Type: text/plain\r\n"
+            f"Content-Length: {agent_length}\r\n"
+            "\r\n"
+            f"{agent}"
+        )
     else:
         response = "HTTP/1.1 404 Not Found\r\n\r\n"
 
