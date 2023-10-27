@@ -1,38 +1,31 @@
+# Build Your Own HTTP Server Challenge
+
 [![progress-banner](https://backend.codecrafters.io/progress/http-server/316cd5f8-08b1-4958-9f6e-d3035930780d)](https://app.codecrafters.io/users/codecrafters-bot?r=2qF)
 
-This is a starting point for Python solutions to the
-["Build Your Own HTTP server" Challenge](https://app.codecrafters.io/courses/http-server/overview).
+This repository is a Python-based solution to the ["Build Your Own HTTP Server" Challenge](https://app.codecrafters.io/courses/http-server/overview) on CodeCrafters. The goal is to build a multi-client HTTP/1.1 server using Python.
 
-[HTTP](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol) is the
-protocol that powers the web. In this challenge, you'll build a HTTP/1.1 server
-that is capable of serving multiple clients.
+## Getting Started
 
-Along the way you'll learn about TCP servers,
-[HTTP request syntax](https://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html),
-and more.
+### Prerequisites
 
-**Note**: If you're viewing this repo on GitHub, head over to
-[codecrafters.io](https://codecrafters.io) to try the challenge.
+- Python 3.11
 
-# Passing the first stage
+### How to Run the Server
 
-The entry point for your HTTP server implementation is in `app/main.py`. Study
-and uncomment the relevant code, and push your changes to pass the first stage:
+1. **Clone this repository**: `git clone https://github.com/Danivilanova/codecrafters-http-server-python.git`
+2. **Navigate to the repository**: `cd codecrafters-http-server-python`
+3. **Run the server**: `./your_server.sh`
 
-```sh
-git add .
-git commit -m "pass 1st stage" # any msg
-git push origin master
-```
+## Features
 
-Time to move on to the next stage!
+- HTTP/1.1 Compliant Server
+- Multi-threaded client handling
+- Basic Routing
+- File operations (Read & Write)
+- Custom Echo & User-Agent endpoints
 
-# Stage 2 & beyond
+## Code Structure
 
-Note: This section is for stages 2 and beyond.
-
-1. Ensure you have `python (3.11)` installed locally
-1. Run `./your_server.sh` to run your program, which is implemented in
-   `app/main.py`.
-1. Commit your changes and run `git push origin master` to submit your solution
-   to CodeCrafters. Test output will be streamed to your terminal.
+- `main.py` serves as the entry point and contains the server loop and socket setup.
+- The function `handle_client` is responsible for processing incoming client requests and sending appropriate responses.
+- Utility functions like `read_file`, `write_file`, and `send_response` assist in reading/writing files and sending HTTP responses, respectively.
