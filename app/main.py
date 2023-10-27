@@ -10,8 +10,14 @@ def main():
     #
     server_socket = socket.create_server(("localhost", 4221), reuse_port=True)
     conn, addr = server_socket.accept() # wait for client
-    print("Connection from", addr)
-    conn.send(b"HTTP/1.1 200 OK\r\n\r\n") # send message to client
+
+    # get data
+    data = conn.recv(1024).decode("utf-8")
+    path = data.split(" ")[1]
+    if path == "/":
+        conn.send(b"HTTP/1.1 200 OK\r\n\r\n")
+    else:
+        conn.send(b"HTTP/1.1 404 Not Found\r\n\r\n")
 
 
 
