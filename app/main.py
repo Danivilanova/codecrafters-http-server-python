@@ -1,8 +1,9 @@
 # Uncomment this to pass the first stage
 import socket
 import threading
+import argparse
 
-def handle_client(conn, addr):
+def handle_client(conn, addr, args):
     # get data
     data = conn.recv(1024).decode()
 
@@ -32,9 +33,10 @@ def handle_client(conn, addr):
         )
     elif path.startswith("/files/"):
         file_name = path.split("/files/")[1]
+        folder = args.directory
         try:
-            with open(f"files/{file_name}", "rb") as f:
-                content = f.read()
+            with open(f"{folder}/{file_name}", "rb") as f:
+                content = f.read().decode()
                 content_length = len(content)
                 response = (
                     "HTTP/1.1 200 OK\r\n"
@@ -51,7 +53,7 @@ def handle_client(conn, addr):
     conn.send(response.encode())
     conn.close()
 
-def main():
+def main(args):
     # You can use print statements as follows for debugging, they'll be visible when running tests.
     print("Logs from your program will appear here!")
 
@@ -62,11 +64,16 @@ def main():
     while True:
         conn, addr = server_socket.accept() # wait for client
 
-        thread = threading.Thread(target=handle_client, args=(conn, addr))
+        thread = threading.Thread(target=handle_client, args=(conn, addr, args))
         thread.start()
 
     
 
 
 if __name__ == "__main__":
-    main()
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--directory", default="")
+    args = parser.parse_args()
+    print(args)
+    main(args)
